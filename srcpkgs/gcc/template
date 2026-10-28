@@ -125,6 +125,9 @@ if [ "$_have_gdc" = yes ]; then
 	subpackages+=" gcc-gdc"
 	subpackages+=" libgdruntime-devel libgdruntime"
 	subpackages+=" libgphobos-devel libgphobos"
+	if [ "$XBPS_TARGET_LIBC" = "musl" ]; then
+		makedepends+=" libucontext-devel"
+	fi
 fi
 
 subpackages+=" libstdc++-devel libstdc++ libgcc-devel"
@@ -161,8 +164,6 @@ case "$XBPS_TARGET_MACHINE" in
 	riscv64-musl) _triplet="riscv64-linux-musl";;
 esac
 if [ "$XBPS_TARGET_LIBC" = musl ]; then
-	makedepends+=" libucontext-devel"
-	export LIBUCONTEXT=-lucontext
 	case "${XBPS_TARGET_MACHINE}" in
 	ppc64*) depends+=" musl-devel" ;;
 	armv*|ppc*|mips*|i686*)
