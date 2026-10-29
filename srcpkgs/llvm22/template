@@ -206,6 +206,7 @@ configure_args+="
 _vlink_libs() {
 	local _files="$1"
 	local _f
+	mkdir -p "${DESTDIR}/usr/lib"
 	for _f in $DESTDIR/$_files; do
 		local _base=$(basename "${_f}")
 		ln -s "llvm/${_major}/lib/${_base}" "${DESTDIR}/usr/lib"
@@ -298,8 +299,8 @@ post_install() {
 		rm -vf ${DESTDIR}/${_llvm_bindir}/llvm-config-host
 	fi
 
-	cmake -DCMAKE_INSTALL_PREFIX=${DESTDIR}/usr \
-		-P ${wrksrc}/${build_wrksrc}/builddir_runtimes/cmake_install.cmake
+	cmake -DCMAKE_INSTALL_PREFIX=${DESTDIR}/usr/${_llvm_prefix} \
+		-P ${wrksrc}/${build_wrksrc}/build/runtimes/cmake_install.cmake
 
 	# Can this be disabled some other way?
 	rm -vf ${DESTDIR}/usr/lib64
