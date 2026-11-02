@@ -18,6 +18,7 @@ fi
 post_extract() {
 	mv toybox-${version} toybox
 	cp -r toybox toybox-static
+  cp -r toybox toybox-huge
 }
 
 do_build() {
@@ -30,6 +31,10 @@ do_build() {
 	# toybox-static
 	make -C toybox-static defconfig
 	make -C toybox-static ${makejobs} LDFLAGS="-static" toybox
+
+  # toybox-huge
+  make -C toybox-huge allyesconfig
+  make -C toybox-huge ${makejobs} toybox
 }
 
 pre_check() {
@@ -66,5 +71,14 @@ toybox-static_package() {
 	pkg_install() {
 		vbin toybox-static/toybox toybox.static
 		vlicense toybox-static/LICENSE
+	}
+}
+
+toybox-huge_package() {
+	short_desc+=" - extra toys"
+  conflicts="toybox>=0"
+	pkg_install() {
+		vbin toybox-huge/toybox toybox
+		vlicense toybox-huge/LICENSE
 	}
 }
